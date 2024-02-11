@@ -576,6 +576,20 @@ void Cmd_CenterView_f( const idCmdArgs &args ) {
 	player->SetViewAngles( ang );
 }
 
+void Cmd_Locate_f(const idCmdArgs& args) {
+	idPlayer* player;//C++ doesn't initialize variables for you, will be set to random things
+	idVec3 origin;
+
+	player = gameLocal.GetLocalPlayer();
+	if (!player) {//is player null?
+		//log an error message here
+		return;
+	}
+
+	origin = player->GetEyePosition();
+
+	gameLocal.Printf("location: (%f, %f, %f)\n", origin.x, origin.y, origin.z);
+}
 /*
 ==================
 Cmd_God_f
@@ -589,7 +603,7 @@ void Cmd_God_f( const idCmdArgs &args ) {
 	char		*msg;
 	idPlayer	*player;
 
-	player = gameLocal.GetLocalPlayer();
+	player = gameLocal.GetLocalPlayer();//gameLocal function: global local class that is the "local game state"; GetLocalPlayer() returns a pointer to player
 	if ( !player || !gameLocal.CheatsOk() ) {
 		return;
 	}
@@ -3232,8 +3246,8 @@ void idGameLocal::InitConsoleCommands( void ) {
 	cmdSystem->AddCommand( "buyMenu",				Cmd_ToggleBuyMenu_f,		CMD_FL_GAME,				"Toggle buy menu (if in a buy zone and the game type supports it)" );
 	cmdSystem->AddCommand( "buy",					Cmd_BuyItem_f,				CMD_FL_GAME,				"Buy an item (if in a buy zone and the game type supports it)" );
 // RITUAL END
-
-}
+	cmdSystem->AddCommand("locate", Cmd_Locate_f, CMD_FL_GAME, "Print the player location to the screen");
+};
 
 /*
 =================
