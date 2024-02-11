@@ -4,7 +4,7 @@
 // MERGE_DATE 07/07/2004
 
 #ifndef __GAME_PLAYER_H__
-#define __GAME_PLAYER_H__
+#define __GAME_PLAYER_H__//compiler guards
 
 /*
 ===============================================================================
@@ -14,7 +14,7 @@
 ===============================================================================
 */
 
-extern const idEventDef EV_Player_GetButtons;
+extern const idEventDef EV_Player_GetButtons;//modifier on a variable, variable declared in another file; during linking process, finds copy/reference of variable in other files
 extern const idEventDef EV_Player_GetMove;
 extern const idEventDef EV_Player_GetViewAngles;
 extern const idEventDef EV_Player_SetViewAngles;
@@ -55,9 +55,9 @@ const int	ASYNC_PLAYER_INV_AMMO_BITS = idMath::BitsForInteger( 999 );	// 9 bits 
 const int	ASYNC_PLAYER_INV_CLIP_BITS = -7;							// -7 bits to cover the range [-1, 60]
 const int	ASYNC_PLAYER_INV_WPMOD_BITS = 3;							// 3 bits (max of 3 mods per gun)
 // NOTE: protocol 69 used 6 bits, but that's only used for client -> server traffic, so doesn't affect backwards protocol replay compat
-const int	IMPULSE_NUMBER_OF_BITS		= 8;							// allows for 2<<X impulses
+const int	IMPULSE_NUMBER_OF_BITS		= 8;							// allows for 2<<X impulses, allocates memory for the value
 
-#define MAX_CONCURRENT_VOICES	3
+#define MAX_CONCURRENT_VOICES	3 //this is not a variable, it's a compiler directive, upon compiling replaces text with 3 and then compiles the line, loses context/name for it
 
 // RAVEN BEGIN
 // jnewquist: Xenon weapon combo system
@@ -82,7 +82,7 @@ typedef enum {
 	FOCUS_USABLE_VEHICLE,
 	FOCUS_CHARACTER,
 	FOCUS_MAX
-} playerFocus_t;
+} playerFocus_t;//mutually exclusive states
 
 struct idItemInfo {
 	idStr name;
@@ -109,7 +109,7 @@ struct rvDatabaseEntry {
 */
 typedef struct {
 	int		time;
-	idVec3	dir;		// scaled larger for running
+	idVec3	dir;		// scaled larger for running, 3D, float, vector but not C++/mathematical vector; vector is a set of three numbers; delta over time variable (changes)
 } loggedAccel_t;
 
 typedef struct {
@@ -192,9 +192,9 @@ typedef enum {
 
 const int	ASYNC_PLAYER_TOURNEY_STATUS_BITS = idMath::BitsForInteger( PTS_NUM_STATES );
 
-class idInventory {
+class idInventory {//flat class, not inherited; local to the player header file
 public:
-	int						maxHealth;
+	int						maxHealth;//player is the only entity that can heal
 	int						weapons;
 // RITUAL BEGIN
 // squirrel: Mode-agnostic buymenus
@@ -217,15 +217,15 @@ public:
 
  	int						lastGiveTime;
  	
-	idList<idDict *>		items;
+	idList<idDict *>		items;//unbounded list of things; list of pointers to idDict; generic type
 	idStrList				pdas;
 	idStrList				pdaSecurity;
 	idStrList				videos;
 
 	idList<idLevelTriggerInfo> levelTriggers;
 
-							idInventory() { Clear(); }
-							~idInventory() { Clear(); }
+							idInventory() { Clear(); }//constructor
+							~idInventory() { Clear(); }//destructor, called when class leaves memory //Game engines must handle all of its memory itself; whenever more memory is accessed, OS is asked for it (done through level loading screens)
 
 	// save games
 	void					Save( idSaveGame *savefile ) const;					// archives object for save game file
@@ -267,7 +267,7 @@ public:
 	int						secretAreasDiscovered;
 };
 
-class idPlayer : public idActor {
+class idPlayer : public idActor {//idPlayer inherits idActor (named animations with named events)
 public:
 
  	enum {
@@ -330,12 +330,12 @@ public:
 	} pfl;
 		
 	// inventory
-	idInventory				inventory;
+	idInventory				inventory;//means that every player has an inventory
 
-	rvWeapon*						weapon;
-	idEntityPtr<rvViewWeapon>		weaponViewModel;
+	rvWeapon*						weapon;//pointer - direct memory address, but no security measures
+	idEntityPtr<rvViewWeapon>		weaponViewModel;//keeps additional metadata on an entity to make any needed changes; ex: if weapon changes, model then changes
 	idEntityPtr<idAnimatedEntity>	weaponWorldModel;
-	const idDeclEntityDef*			weaponDef;
+	const idDeclEntityDef*			weaponDef;// pointer but no modification allowed because of const modifier
 
 
  	idUserInterface *		hud;				// Common hud
@@ -431,8 +431,8 @@ public:
 							idPlayer();
 	virtual					~idPlayer();
 
-	void					Spawn( void );
-	void					Think( void );
+	void					Spawn( void );//Spawn function is used to spawn in the player, not the idPlayer(); initiliazes player stats and stuff
+	void					Think( void );//Unique behaviors for entities; gets called for setting entity behaviors
 
 	// save games
 	void					Save( idSaveGame *savefile ) const;					// archives object for save game file
@@ -440,7 +440,7 @@ public:
 
 	static const char*		GetSpawnClassname ( void );
 
-	virtual void			Hide( void );
+	virtual void			Hide( void );//virtual functions - not defined in parent class, must be define in the child class
 	virtual void			Show( void );
 
 	void					Init( void );
@@ -1165,8 +1165,8 @@ ID_INLINE bool idPlayer::IsRespawning( void ) {
  	return respawning;
 }
 
-ID_INLINE idPhysics* idPlayer::GetPlayerPhysics( void ) {
-	return &physicsObj;
+ID_INLINE idPhysics* idPlayer::GetPlayerPhysics( void ) {//function defintions go in .cpp; class descriptions go in .h
+	return &physicsObj;//returns address of physicsObj
 }
 
 ID_INLINE bool idPlayer::IsInTeleport( void ) {

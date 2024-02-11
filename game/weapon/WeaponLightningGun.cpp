@@ -76,7 +76,7 @@ protected:
 
 private:
 
-	void				Attack					( idEntity* ent, const idVec3& dir, float power = 1.0f );
+	void				Attack					( idEntity* ent, const idVec3& dir, float power, float spread );
 
 	void				UpdateChainLightning	( void );
 	void				StopChainLightning		( void );
@@ -309,6 +309,7 @@ void rvWeaponLightningGun::Think ( void ) {
 	if ( !gameLocal.isClient && gameLocal.time >= nextAttackTime ) {
 		int    i;
 		float  power = 1.0f;
+		float  spread = 0.2;
 		idVec3 dir;
 		
 		owner->inventory.UseAmmo( ammoType, ammoRequired );
@@ -317,9 +318,9 @@ void rvWeaponLightningGun::Think ( void ) {
 		dir.Normalize ( );
 		
 		nextAttackTime = gameLocal.time + (fireRate * owner->PowerUpModifier ( PMOD_FIRERATE ));
-		Attack ( currentPath.target, dir, power );
+		Attack ( currentPath.target, dir, power, spread);
 		for ( i = 0; i < chainLightning.Num(); i ++, power *= 0.75f ) {
-			Attack ( chainLightning[i].target, chainLightning[i].normal, power );
+			Attack ( chainLightning[i].target, chainLightning[i].normal, power, spread*1.1 );
 		}
 
 		statManager->WeaponFired( owner, owner->GetCurrentWeapon(), chainLightning.Num() + 1 );
@@ -336,7 +337,7 @@ void rvWeaponLightningGun::Think ( void ) {
 rvWeaponLightningGun::Attack
 ================
 */
-void rvWeaponLightningGun::Attack ( idEntity* ent, const idVec3& dir, float power ) {
+void rvWeaponLightningGun::Attack ( idEntity* ent, const idVec3& dir, float power , float spread) {
 	// Double check
 	if ( !ent || !ent->fl.takedamage ) {
 		return;

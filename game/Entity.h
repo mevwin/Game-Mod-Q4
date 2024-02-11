@@ -107,7 +107,7 @@ public:
 	idList<signal_t> signal[ NUM_SIGNALS ];
 };
 
-class idEntity : public idClass {
+class idEntity : public idClass {//parent class of everything in the game
 public:
 	static const int		MAX_PVS_AREAS = 4;
 
@@ -675,6 +675,7 @@ protected:
 // mekberg: added
 	void					Event_SetHealth					( float newHealth );
 // RAVEN END
+	//safest place to add new date to idEntity
 };
 
 // RAVEN BEGIN
