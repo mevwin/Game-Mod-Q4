@@ -1,6 +1,6 @@
 // RAVEN BEGIN
 // bdube: note that this file is no longer merged with Doom3 updates
-//
+// changed
 // MERGE_DATE 09/30/2004
 
 #include "../idlib/precompiled.h"
