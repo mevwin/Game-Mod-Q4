@@ -1012,10 +1012,10 @@ void Cmd_GetViewpos_f( const idCmdArgs &args ) {
 
 	const renderView_t *view = player->GetRenderView();
 	if ( view ) {
-		gameLocal.Printf( "(%s) %.1f\n", view->vieworg.ToString(), view->viewaxis[0].ToPitch() );
+		gameLocal.Printf( "(%s) %.1f\n", view->vieworg.ToString(), view->viewaxis[0].ToYaw() );
 	} else {
 		player->GetViewPos( origin, axis );
-		gameLocal.Printf( "(%s) %.1f\n", origin.ToString(), axis[0].ToPitch() );
+		gameLocal.Printf( "(%s) %.1f\n", origin.ToString(), axis[0].ToYaw() );
 	}
 }
 
@@ -1036,13 +1036,13 @@ void Cmd_SetViewpos_f( const idCmdArgs &args ) {
 	}
 
 	if ( ( args.Argc() != 4 ) && ( args.Argc() != 5 ) ) {
-		gameLocal.Printf( "usage: setviewpos <x> <y> <z> <pitch>\n" );
+		gameLocal.Printf( "usage: setviewpos <x> <y> <z> <yaw>\n" );
 		return;
 	}
 
 	angles.Zero();
 	if ( args.Argc() == 5 ) {
-		angles.pitch = atof( args.Argv( 4 ) );
+		angles.yaw = atof( args.Argv( 4 ) );
 	}
 
 	for ( i = 0 ; i < 3 ; i++ ) {
