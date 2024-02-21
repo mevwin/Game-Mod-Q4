@@ -9654,7 +9654,7 @@ void idPlayer::RouteGuiMouse( idUserInterface *gui ) {
  	sysEvent_t ev;
  	const char *command;
 
-	if ( usercmd.mx != oldMouseX || usercmd.my != oldMouseY ) {
+	if ( (usercmd.mx != oldMouseX || usercmd.my != oldMouseY) ) {
  		ev = sys->GenerateMouseMoveEvent( usercmd.mx - oldMouseX, usercmd.my - oldMouseY );
  		command = gui->HandleEvent( &ev, gameLocal.time );
 		oldMouseX = usercmd.mx;
