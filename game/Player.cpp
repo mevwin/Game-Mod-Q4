@@ -10837,8 +10837,9 @@ void idPlayer::OffsetThirdPersonView( float angle, float range, float height, bo
 		focusDist = 1.0f;	// should never happen
 	}
 
-	angles.pitch = - RAD2DEG( idMath::ATan( focusPoint.z, focusDist ) );
-	angles.yaw -= angle;
+	angles.pitch = 90.0;
+	angles.yaw = 0.0;
+	angles.roll = 0.0;
 
 	renderView->vieworg = view;
 	renderView->viewaxis = angles.ToMat3() * physicsObj.GetGravityAxis();
