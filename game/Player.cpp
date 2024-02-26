@@ -10837,7 +10837,7 @@ void idPlayer::OffsetThirdPersonView( float angle, float range, float height, bo
 		focusDist = 1.0f;	// should never happen
 	}
 
-	angles.pitch = 90.0;
+	angles.pitch = 85.0;
 	angles.yaw = 0.0;
 	angles.roll = 0.0;
 

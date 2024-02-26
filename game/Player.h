@@ -794,6 +794,7 @@ public:
 	void					ClampCash( float minCash, float maxCash );
 	void					SetCash( float newCashAmount );
 	void					ResetCash();
+	void					Event_GetMove(void);
 // RITUAL END
 
 protected:
@@ -1064,7 +1065,7 @@ private:
 	void					SetFocus					( playerFocus_t type, int focusTime, idEntity* ent, idUserInterface* ui );
 
 	void					Event_GetButtons			( void );
-	void					Event_GetMove				( void );
+	
 	void					Event_GetViewAngles			( void );
 	void					Event_SetViewAngles			( const idVec3 &vec );
 	void					Event_StopFxFov				( void );

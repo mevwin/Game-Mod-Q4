@@ -28,6 +28,7 @@
 #ifdef _WIN32
 #include "TypeInfo"
 #include "../Weapon.h"
+#include "../Player.h"
 #else
 #include "NoGameTypeInfo.h"
 #endif
@@ -582,7 +583,7 @@ void Cmd_Locate_f(const idCmdArgs& args) {
 	idVec3 origin;
 
 	player = gameLocal.GetLocalPlayer();
-	if (!player) {//is player null?
+	if ( !player ) {//is player null?
 		//log an error message here
 		return;
 	}
@@ -593,15 +594,15 @@ void Cmd_Locate_f(const idCmdArgs& args) {
 }
 
 void Cmd_TogglePOV_f(const idCmdArgs& args) {
-	idPlayer* player;//C++ doesn't initialize variables for you, will be set to random things
+	idPlayer*	player;//C++ doesn't initialize variables for you, will be set to random things
 
 	player = gameLocal.GetLocalPlayer();
-	if (!player) {//is player null?
+	if ( !player ) {//is player null?
 		//log an error message here
 		return;
 	}
 
-	if( pm_thirdPerson.GetBool() ){
+	if ( pm_thirdPerson.GetBool() ){
 		pm_thirdPerson.SetBool(false);
 		pm_minviewpitch.SetInteger(-89);
 		pm_maxviewpitch.SetInteger(89);
@@ -1027,7 +1028,7 @@ Cmd_GetViewpos_f
 void Cmd_GetViewpos_f( const idCmdArgs &args ) {
 	idPlayer	*player;
 	idVec3		origin;
-	idMat3		axis;
+	idMat3      axis;
 
 	player = gameLocal.GetLocalPlayer();
 	if ( !player ) {
@@ -2141,6 +2142,7 @@ static void Cmd_WeaponSplat_f( const idCmdArgs &args ) {
 	if ( !player || !gameLocal.CheatsOk() ) {
 		return;
 	}
+
 
 	player->weapon->BloodSplat( 2.0f );
 }
@@ -3270,8 +3272,8 @@ void idGameLocal::InitConsoleCommands( void ) {
 	cmdSystem->AddCommand( "buyMenu",				Cmd_ToggleBuyMenu_f,		CMD_FL_GAME,				"Toggle buy menu (if in a buy zone and the game type supports it)" );
 	cmdSystem->AddCommand( "buy",					Cmd_BuyItem_f,				CMD_FL_GAME,				"Buy an item (if in a buy zone and the game type supports it)" );
 // RITUAL END
-	cmdSystem->AddCommand("locate",					Cmd_Locate_f,				CMD_FL_GAME,				"Print the player location to the screen");
-	cmdSystem->AddCommand("togglepov",				Cmd_TogglePOV_f,			CMD_FL_GAME,				"Toggle between 1st and 3rd Person POV");
+	cmdSystem->AddCommand( "locate",				Cmd_Locate_f,				CMD_FL_GAME,				"Print the player location to the screen" );
+	cmdSystem->AddCommand( "togglepov",				Cmd_TogglePOV_f,			CMD_FL_GAME,				"Toggle between 1st and 3rd Person POV" );
 };
 
 /*

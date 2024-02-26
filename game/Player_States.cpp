@@ -582,6 +582,17 @@ idPlayer::State_Legs_Run_Forward
 */
 stateResult_t idPlayer::State_Legs_Run_Forward ( const stateParms_t& parms ) {
 	if ( !pfl.jump && pfl.onGround && !pfl.crouch && !pfl.backward && pfl.forward ) {
+		if ( pm_thirdPerson.GetBool() ) {
+			idPlayer* player;
+			idAngles  ang;
+			player = gameLocal.GetLocalPlayer();
+			if (!player) {
+				return SRESULT_ERROR;
+			}
+			ang = player->viewAngles;
+			ang.yaw = 0;
+			player->SetViewAngles(ang);
+		}
 		if( usercmd.buttons & BUTTON_RUN ) {
 			return SRESULT_WAIT;
 		} else {
@@ -601,12 +612,38 @@ idPlayer::State_Legs_Run_Backward
 */
 stateResult_t idPlayer::State_Legs_Run_Backward ( const stateParms_t& parms ) {
 	if ( !pfl.jump && pfl.onGround && !pfl.crouch && !pfl.forward && pfl.backward ) {
-		if( usercmd.buttons & BUTTON_RUN ) {
-			return SRESULT_WAIT;
-		} else {
-			PlayCycle( ANIMCHANNEL_LEGS, "walk_backwards", parms.blendFrames );
-			PostAnimState ( ANIMCHANNEL_LEGS, "Legs_Walk_Backward", parms.blendFrames );
-			return SRESULT_DONE;
+		if (pm_thirdPerson.GetBool()) {
+			idPlayer* player;
+			idAngles  ang;
+			idMat3    axis;
+
+			player = gameLocal.GetLocalPlayer();
+			if (!player) {
+				return SRESULT_ERROR;
+			}
+
+			axis = player->viewAxis;
+			axis.RotateArbitrary( idVec3(0, 0, 1), 180 );
+			player->SetAxis(axis);
+
+			if (usercmd.buttons & BUTTON_RUN) {
+				return SRESULT_WAIT;
+			}
+			else {
+				PlayCycle( ANIMCHANNEL_LEGS, "walk_forward", parms.blendFrames );
+				PostAnimState( ANIMCHANNEL_LEGS, "Legs_Walk_Forward", parms.blendFrames);
+				return SRESULT_DONE;
+			}
+		}
+		else {
+			if (usercmd.buttons & BUTTON_RUN) {
+				return SRESULT_WAIT;
+			}
+			else {
+				PlayCycle(ANIMCHANNEL_LEGS, "walk_backwards", parms.blendFrames);
+				PostAnimState(ANIMCHANNEL_LEGS, "Legs_Walk_Backward", parms.blendFrames);
+				return SRESULT_DONE;
+			}
 		}
 	}
 	PostAnimState ( ANIMCHANNEL_LEGS, "Legs_Idle", parms.blendFrames );
@@ -620,12 +657,38 @@ idPlayer::State_Legs_Run_Left
 */
 stateResult_t idPlayer::State_Legs_Run_Left ( const stateParms_t& parms ) {
 	if ( !pfl.jump && pfl.onGround && !pfl.crouch && (pfl.forward == pfl.backward) && pfl.strafeLeft && !pfl.strafeRight ) {
-		if( usercmd.buttons & BUTTON_RUN ) {
-			return SRESULT_WAIT;
-		} else {
-			PlayCycle( ANIMCHANNEL_LEGS, "walk_left", parms.blendFrames );
-			PostAnimState ( ANIMCHANNEL_LEGS, "Legs_Walk_Left", parms.blendFrames );
-			return SRESULT_DONE;
+		if (pm_thirdPerson.GetBool()) {
+			idPlayer* player;
+			idAngles  ang;
+			idMat3    axis;
+
+			player = gameLocal.GetLocalPlayer();
+			if (!player) {
+				return SRESULT_ERROR;
+			}
+
+			axis = player->viewAxis;
+			axis.RotateArbitrary(idVec3(0, 0, 1), 90);
+			player->SetAxis(axis);
+
+			if (usercmd.buttons & BUTTON_RUN) {
+				return SRESULT_WAIT;
+			}
+			else {
+				PlayCycle(ANIMCHANNEL_LEGS, "walk_forward", parms.blendFrames);
+				PostAnimState(ANIMCHANNEL_LEGS, "Legs_Walk_Forward", parms.blendFrames);
+				return SRESULT_DONE;
+			}
+		}
+		else {
+			if (usercmd.buttons & BUTTON_RUN) {
+				return SRESULT_WAIT;
+			}
+			else {
+				PlayCycle(ANIMCHANNEL_LEGS, "walk_left", parms.blendFrames);
+				PostAnimState(ANIMCHANNEL_LEGS, "Legs_Walk_Left", parms.blendFrames);
+				return SRESULT_DONE;
+			}
 		}
 	}
 	PostAnimState ( ANIMCHANNEL_LEGS, "Legs_Idle", parms.blendFrames );
@@ -639,12 +702,38 @@ idPlayer::State_Legs_Run_Right
 */
 stateResult_t idPlayer::State_Legs_Run_Right ( const stateParms_t& parms ) {
 	if ( !pfl.jump && pfl.onGround && !pfl.crouch && (pfl.forward == pfl.backward) && pfl.strafeRight && !pfl.strafeLeft ) {
-		if( usercmd.buttons & BUTTON_RUN ) {
-			return SRESULT_WAIT;
-		} else {
-			PlayCycle( ANIMCHANNEL_LEGS, "walk_right", parms.blendFrames );
-			PostAnimState ( ANIMCHANNEL_LEGS, "Legs_Walk_Right", parms.blendFrames );
-			return SRESULT_DONE;
+		if (pm_thirdPerson.GetBool()) {
+			idPlayer* player;
+			idAngles  ang;
+			idMat3    axis;
+
+			player = gameLocal.GetLocalPlayer();
+			if (!player) {
+				return SRESULT_ERROR;
+			}
+
+			axis = player->viewAxis;
+			axis.RotateArbitrary(idVec3(0, 0, 1), 270);
+			player->SetAxis(axis);
+
+			if (usercmd.buttons & BUTTON_RUN) {
+				return SRESULT_WAIT;
+			}
+			else {
+				PlayCycle(ANIMCHANNEL_LEGS, "walk_forward", parms.blendFrames);
+				PostAnimState(ANIMCHANNEL_LEGS, "Legs_Walk_Forward", parms.blendFrames);
+				return SRESULT_DONE;
+			}
+		}
+		else {
+			if (usercmd.buttons & BUTTON_RUN) {
+				return SRESULT_WAIT;
+			}
+			else {
+				PlayCycle(ANIMCHANNEL_LEGS, "walk_right", parms.blendFrames);
+				PostAnimState(ANIMCHANNEL_LEGS, "Legs_Walk_Right", parms.blendFrames);
+				return SRESULT_DONE;
+			}
 		}
 	}
 	PostAnimState ( ANIMCHANNEL_LEGS, "Legs_Idle", parms.blendFrames );
@@ -658,6 +747,17 @@ idPlayer::State_Legs_Walk_Forward
 */
 stateResult_t idPlayer::State_Legs_Walk_Forward ( const stateParms_t& parms ) {
 	if ( !pfl.jump && pfl.onGround && !pfl.crouch && !pfl.backward && pfl.forward ) {
+		if (pm_thirdPerson.GetBool()) {
+			idPlayer* player;
+			idAngles  ang;
+			player = gameLocal.GetLocalPlayer();
+			if (!player) {
+				return SRESULT_ERROR;
+			}
+			ang = player->viewAngles;
+			ang.yaw = 0;
+			player->SetViewAngles(ang);
+		}
 		if( !(usercmd.buttons & BUTTON_RUN) ) {
 			return SRESULT_WAIT;
 		} else {
@@ -677,12 +777,38 @@ idPlayer::State_Legs_Walk_Backward
 */
 stateResult_t idPlayer::State_Legs_Walk_Backward ( const stateParms_t& parms ) {
 	if ( !pfl.jump && pfl.onGround && !pfl.crouch && !pfl.forward && pfl.backward ) {
-		if( !(usercmd.buttons & BUTTON_RUN) ) {
-			return SRESULT_WAIT;
-		} else {
-			PlayCycle( ANIMCHANNEL_LEGS, "run_backwards", parms.blendFrames );
-			PostAnimState ( ANIMCHANNEL_LEGS, "Legs_Run_Backward", parms.blendFrames );
-			return SRESULT_DONE;
+		if (pm_thirdPerson.GetBool()) {
+			idPlayer* player;
+			idAngles  ang;
+			idMat3    axis;
+
+			player = gameLocal.GetLocalPlayer();
+			if (!player) {
+				return SRESULT_ERROR;
+			}
+
+			axis = player->viewAxis;
+			axis.RotateArbitrary(idVec3(0, 0, 1), 180);
+			player->SetAxis(axis);
+
+			if (!(usercmd.buttons & BUTTON_RUN)) {
+				return SRESULT_WAIT;
+			}
+			else {
+				PlayCycle(ANIMCHANNEL_LEGS, "run_forward", parms.blendFrames);
+				PostAnimState(ANIMCHANNEL_LEGS, "Legs_Run_Forward", parms.blendFrames);
+				return SRESULT_DONE;
+			}
+		}
+		else {
+			if (!(usercmd.buttons & BUTTON_RUN)) {
+				return SRESULT_WAIT;
+			}
+			else {
+				PlayCycle(ANIMCHANNEL_LEGS, "run_backwards", parms.blendFrames);
+				PostAnimState(ANIMCHANNEL_LEGS, "Legs_Run_Backward", parms.blendFrames);
+				return SRESULT_DONE;
+			}
 		}
 	}
 	PostAnimState ( ANIMCHANNEL_LEGS, "Legs_Idle", parms.blendFrames );
@@ -696,12 +822,38 @@ idPlayer::State_Legs_Walk_Left
 */
 stateResult_t idPlayer::State_Legs_Walk_Left ( const stateParms_t& parms ) {
 	if ( !pfl.jump && pfl.onGround && !pfl.crouch && (pfl.forward == pfl.backward) && pfl.strafeLeft && !pfl.strafeRight ) {
-		if( !(usercmd.buttons & BUTTON_RUN) ) {
-			return SRESULT_WAIT;
-		} else {
-			PlayCycle( ANIMCHANNEL_LEGS, "run_strafe_left", parms.blendFrames );
-			PostAnimState ( ANIMCHANNEL_LEGS, "Legs_Run_Left", parms.blendFrames );
-			return SRESULT_DONE;
+		if (pm_thirdPerson.GetBool()) {
+			idPlayer* player;
+			idAngles  ang;
+			idMat3    axis;
+
+			player = gameLocal.GetLocalPlayer();
+			if (!player) {
+				return SRESULT_ERROR;
+			}
+
+			axis = player->viewAxis;
+			axis.RotateArbitrary(idVec3(0, 0, 1), 90);
+			player->SetAxis(axis);
+
+			if (!(usercmd.buttons & BUTTON_RUN)) {
+				return SRESULT_WAIT;
+			}
+			else {
+				PlayCycle(ANIMCHANNEL_LEGS, "run_forward", parms.blendFrames);
+				PostAnimState(ANIMCHANNEL_LEGS, "Legs_Run_Forward", parms.blendFrames);
+				return SRESULT_DONE;
+			}
+		}
+		else {
+			if (!(usercmd.buttons & BUTTON_RUN)) {
+				return SRESULT_WAIT;
+			}
+			else {
+				PlayCycle(ANIMCHANNEL_LEGS, "run_strafe_left", parms.blendFrames);
+				PostAnimState(ANIMCHANNEL_LEGS, "Legs_Run_Left", parms.blendFrames);
+				return SRESULT_DONE;
+			}
 		}
 	}
 	PostAnimState ( ANIMCHANNEL_LEGS, "Legs_Idle", parms.blendFrames );
@@ -715,12 +867,40 @@ idPlayer::State_Legs_Walk_Right
 */
 stateResult_t idPlayer::State_Legs_Walk_Right ( const stateParms_t& parms ) {
 	if ( !pfl.jump && pfl.onGround && !pfl.crouch && (pfl.forward == pfl.backward) && pfl.strafeRight && !pfl.strafeLeft ) {
-		if( !(usercmd.buttons & BUTTON_RUN) ) {
-			return SRESULT_WAIT;
-		} else {
-			PlayCycle( ANIMCHANNEL_LEGS, "run_strafe_right", parms.blendFrames );
-			PostAnimState ( ANIMCHANNEL_LEGS, "Legs_Run_Right", parms.blendFrames );
-			return SRESULT_DONE;
+		if (pm_thirdPerson.GetBool()) {
+			idPlayer* player;
+			idAngles  ang;
+			idMat3    axis;
+
+			player = gameLocal.GetLocalPlayer();
+			if (!player) {
+				return SRESULT_ERROR;
+			}
+
+			axis = player->viewAxis;
+			axis.RotateArbitrary(idVec3(0, 0, 1), 90);
+			player->SetAxis(axis);
+
+
+
+			if (!(usercmd.buttons & BUTTON_RUN)) {
+				return SRESULT_WAIT;
+			}
+			else {
+				PlayCycle(ANIMCHANNEL_LEGS, "run_forward", parms.blendFrames);
+				PostAnimState(ANIMCHANNEL_LEGS, "Legs_Run_Forward", parms.blendFrames);
+				return SRESULT_DONE;
+			}
+		} 
+		else{
+			if (!(usercmd.buttons & BUTTON_RUN)) {
+				return SRESULT_WAIT;
+			}
+			else {
+				PlayCycle(ANIMCHANNEL_LEGS, "run_strafe_right", parms.blendFrames);
+				PostAnimState(ANIMCHANNEL_LEGS, "Legs_Run_Right", parms.blendFrames);
+				return SRESULT_DONE;
+			}
 		}
 	}
 	PostAnimState ( ANIMCHANNEL_LEGS, "Legs_Idle", parms.blendFrames );
