@@ -220,21 +220,24 @@ rvWeaponMachinegun::State_Fire
 ================
 */
 stateResult_t rvWeaponMachinegun::State_Fire ( const stateParms_t& parms ) {
+	idPlayer* player;
+	player = gameLocal.GetLocalPlayer();
 	enum {
 		STAGE_INIT,
 		STAGE_WAIT,
 	};	
 	switch ( parms.stage ) {
 		case STAGE_INIT:
-			if ( !pm_thirdPerson.GetBool() && wsfl.zoom ) {
+			if ( wsfl.zoom ) {
 				nextAttackTime = gameLocal.time + (altFireRate * owner->PowerUpModifier ( PMOD_FIRERATE ));
 				Attack ( true, 1, spreadZoom, 0, 1.0f );
 				fireHeld = true;
+				PlayAnim(ANIMCHANNEL_ALL, "fire", 0);
 			} else {
 				nextAttackTime = gameLocal.time + (fireRate * owner->PowerUpModifier ( PMOD_FIRERATE ));
-				Attack ( false, 1, 20, 0, 1.0f );
+				Attack ( false, 1, spread, 0, 1.0f );
+				PlayAnim(ANIMCHANNEL_ALL, "fire", 0);
 			}
-			PlayAnim ( ANIMCHANNEL_ALL, "fire", 0 );	
 			return SRESULT_STAGE ( STAGE_WAIT );
 	
 		case STAGE_WAIT:		

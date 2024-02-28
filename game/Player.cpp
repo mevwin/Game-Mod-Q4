@@ -3529,8 +3529,16 @@ void idPlayer::UpdateHudWeapon( int displayWeapon ) {
 	// Weapon name for weapon selection
 	const idDeclEntityDef* w = GetWeaponDef( ( displayWeapon != -1 ) ? displayWeapon:idealWeapon );
 	if ( w ) {
-		idStr langToken = w->dict.GetString( "inv_name" );
-		hud->SetStateString( "weaponname", common->GetLocalizedString( langToken ) );
+		idStr langToken = w->dict.GetString("weaponname");
+		if ( common->GetLocalizedString(langToken) == "SOCOM" ) {
+			hud->SetStateString("weaponname", "SOCOM" );
+		}
+		else if (common->GetLocalizedString(langToken) == "FA-MAS") {
+			hud->SetStateString("weaponname", "FA-MAS");
+		}
+		else {
+			hud->SetStateString("weaponname", common->GetLocalizedString(w->dict.GetString("inv_name")));
+		}
 	}
 
 	UpdateHudAmmo( hud );
@@ -9399,7 +9407,7 @@ void idPlayer::Think( void ) {
 	}
 	
 	// zooming
-	bool zoom = (usercmd.buttons & BUTTON_ZOOM) && CanZoom();
+	bool zoom = (usercmd.buttons & BUTTON_ZOOM) && CanZoom() && !pm_thirdPerson.GetBool();
 	if ( zoom != zoomed ) {
 		if ( zoom ) {
 			ProcessEvent ( &EV_Player_ZoomIn );
@@ -10838,7 +10846,7 @@ void idPlayer::OffsetThirdPersonView( float angle, float range, float height, bo
 	}
 
 	angles.pitch = 85.0;
-	angles.yaw = 0.0;
+	angles.yaw -= angle;
 	angles.roll = 0.0;
 
 	renderView->vieworg = view;

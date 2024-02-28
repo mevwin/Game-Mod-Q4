@@ -612,7 +612,23 @@ void Cmd_TogglePOV_f(const idCmdArgs& args) {
 		pm_minviewpitch.SetInteger(0);
 		pm_maxviewpitch.SetInteger(0);
 	}
-	
+}
+
+void Cmd_Forward_f(const idCmdArgs& args) {
+	idPlayer* player;
+	idAngles ang;
+
+	player = gameLocal.GetLocalPlayer();
+	if (pm_thirdPerson.GetBool()) {
+		ang = player->viewAngles;
+		ang.yaw = 0;
+		player->SetViewAngles( ang );
+		player->usercmd.forwardmove;
+	}
+	else {
+		player->usercmd.forwardmove;
+	}
+
 }
 
 /*
