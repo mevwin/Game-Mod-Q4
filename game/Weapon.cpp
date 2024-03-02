@@ -3133,7 +3133,7 @@ bool rvWeapon::StartSound ( const char *soundName, const s_channelType channel, 
 		common->Warning( "NULL viewmodel %s\n", __FUNCTION__ );
 		return false;
 	}
-	return viewModel->StartSound( soundName, channel, soundShaderFlags, broadcast, length );
+	return viewModel->StartSound(soundName, channel, soundShaderFlags, broadcast, length);
 }
 
 /*

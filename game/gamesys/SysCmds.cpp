@@ -579,8 +579,8 @@ void Cmd_CenterView_f( const idCmdArgs &args ) {
 }
 
 void Cmd_Locate_f(const idCmdArgs& args) {
-	idPlayer* player;//C++ doesn't initialize variables for you, will be set to random things
-	idVec3 origin;
+	idPlayer*	player;//C++ doesn't initialize variables for you, will be set to random things
+	idVec3		origin;
 
 	player = gameLocal.GetLocalPlayer();
 	if ( !player ) {//is player null?
@@ -590,7 +590,7 @@ void Cmd_Locate_f(const idCmdArgs& args) {
 
 	origin = player->GetEyePosition();
 
-	gameLocal.Printf("location: (%f, %f, %f)\n", origin.x, origin.y, origin.z);
+	gameLocal.Printf("location: (%f, %f, %f, %f)\n", origin.x, origin.y, origin.z, player->EyeHeight() );
 }
 
 void Cmd_TogglePOV_f(const idCmdArgs& args) {
@@ -601,7 +601,6 @@ void Cmd_TogglePOV_f(const idCmdArgs& args) {
 		//log an error message here
 		return;
 	}
-
 	if ( pm_thirdPerson.GetBool() ){
 		pm_thirdPerson.SetBool(false);
 		pm_minviewpitch.SetInteger(-89);

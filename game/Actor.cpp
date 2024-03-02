@@ -1621,7 +1621,7 @@ bool idActor::CanSeeFrom ( const idVec3& from, const idVec3& toPos, bool useFov 
 		return true;
 	}
 	gameLocal.TracePoint( this, tr, from, toPos, MASK_OPAQUE, this );
-	if ( tr.fraction >= 1.0f ) { // || ( gameLocal.GetTraceEntity( tr ) == ent ) ) {
+	if ( tr.fraction >= 0.4f ) { // || ( gameLocal.GetTraceEntity( tr ) == ent ) ) {
 		return true;
 	}
 

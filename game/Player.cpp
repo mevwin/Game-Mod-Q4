@@ -10774,7 +10774,7 @@ void idPlayer::OffsetThirdPersonVehicleView( bool clip ) {
 idPlayer::OffsetThirdPersonView
 ===============
 */
-void idPlayer::OffsetThirdPersonView( float angle, float range, float height, bool clip ) {
+void idPlayer::OffsetThirdPersonView(float angle, float range, float height, bool clip) {
 	idVec3			view;
 	idVec3			focusAngles;
 	trace_t			trace;
@@ -10787,30 +10787,30 @@ void idPlayer::OffsetThirdPersonView( float angle, float range, float height, bo
 	idBounds		bounds;
 
 	angles = viewAngles;
-	GetViewPos( origin, axis );
+	GetViewPos(origin, axis);
 
-	if ( angle ) {
+	if (angle) {
 		angles.pitch = 0.0f;
 	}
 
-	if ( angles.pitch > 45.0f ) {
+	if (angles.pitch > 45.0f) {
 		angles.pitch = 45.0f;		// don't go too far overhead
 	}
 
 	focusPoint = origin + angles.ToForward() * THIRD_PERSON_FOCUS_DISTANCE;
 	focusPoint.z += height;
 	view = origin;
-// RAVEN BEGIN
-// abahr: taking into account gravity
+	// RAVEN BEGIN
+	// abahr: taking into account gravity
 	view += physicsObj.GetGravityAxis()[2] * (8.0f + height);
-// RAVEN END
+	// RAVEN END
 
 	angles.pitch *= 0.5f;
 	renderView->viewaxis = angles.ToMat3() * physicsObj.GetGravityAxis();
 
-	idMath::SinCos( DEG2RAD( angle ), sideScale, forwardScale );
-	view -= range * forwardScale * renderView->viewaxis[ 0 ];
-	view += range * sideScale * renderView->viewaxis[ 1 ];
+	idMath::SinCos(DEG2RAD(angle), sideScale, forwardScale);
+	view -= range * forwardScale * renderView->viewaxis[0];
+	view += range * sideScale * renderView->viewaxis[1];
 
  	if ( clip ) {
  		// trace a ray from the origin to the viewpoint to make sure the view isn't
@@ -10845,7 +10845,7 @@ void idPlayer::OffsetThirdPersonView( float angle, float range, float height, bo
 		focusDist = 1.0f;	// should never happen
 	}
 
-	angles.pitch = 85.0;
+	angles.pitch = 55.0;
 	angles.yaw -= angle;
 	angles.roll = 0.0;
 
@@ -11013,7 +11013,9 @@ create the renderView for the current tic
 void idPlayer::CalculateRenderView( void ) {
 	int i;
 	float range;
+	idPlayer* player;
 
+	player = gameLocal.GetLocalPlayer();
 	if ( !renderView ) {
 // RAVEN BEGIN
 // mwhitlock: Dynamic memory consolidation

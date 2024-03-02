@@ -1141,7 +1141,6 @@ void idAI::Think( void ) {
 	if ( CheckDormant() ) {
 		return;
 	}
-
 	// Simple think this frame?
 	aifl.simpleThink = aiManager.IsSimpleThink ( this );
 

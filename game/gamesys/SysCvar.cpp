@@ -231,7 +231,7 @@ idCVar ai_showPaths(				"ai_showPaths",				"0",			CVAR_GAME | CVAR_BOOL, "draws 
 idCVar ai_showObstacleAvoidance(	"ai_showObstacleAvoidance",	"0",			CVAR_GAME | CVAR_INTEGER, "draws obstacle avoidance information for monsters.  if 2, draws obstacles for player, as well", 0, 2, idCmdSystem::ArgCompletion_Integer<0,2> );
 idCVar ai_blockedFailSafe(			"ai_blockedFailSafe",		"1",			CVAR_GAME | CVAR_BOOL, "enable blocked fail safe handling" );
 idCVar ai_debugSquad(				"ai_debugSquad",			"0",			CVAR_GAME | CVAR_BOOL, "draws squad info for allies" );
-idCVar ai_debugStealth(				"ai_debugStealth",			"0",			CVAR_GAME | CVAR_INTEGER, "draws suspicion info for enemies" );
+idCVar ai_debugStealth(				"ai_debugStealth",			"1",			CVAR_GAME | CVAR_INTEGER, "draws suspicion info for enemies" );
 idCVar ai_allowTacticalRush(		"ai_allowTacticalRush",		"1",			CVAR_GAME | CVAR_BOOL, "allows tactical ai to rush an enemy when hurt" );
 
 

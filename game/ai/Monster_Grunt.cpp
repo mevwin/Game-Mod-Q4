@@ -67,11 +67,10 @@ void rvMonsterGrunt::Spawn ( void ) {
 	actionMeleeMoveAttack.Init	( spawnArgs, "action_meleeMoveAttack",	NULL,				AIACTIONF_ATTACK );
 	actionChaingunAttack.Init	( spawnArgs, "action_chaingunAttack",	NULL,				AIACTIONF_ATTACK );
 	actionLeapAttack.Init		( spawnArgs, "action_leapAttack",		"Torso_LeapAttack",	AIACTIONF_ATTACK );
-
 	// Enraged to start?
 	if ( spawnArgs.GetBool ( "preinject" ) ) {
 		RageStart ( );
-	}	
+	}
 }
 
 /*
