@@ -1139,6 +1139,7 @@ void idAI::Think( void ) {
 
 	// if we are completely closed off from the player, don't do anything at all
 	if ( CheckDormant() ) {
+		WanderAround();
 		return;
 	}
 	// Simple think this frame?
@@ -1155,7 +1156,9 @@ void idAI::Think( void ) {
 		// clear out the enemy when he dies or is hidden
 		idEntity* enemyEnt = enemy.ent;
 		idActor*  enemyAct = dynamic_cast<idActor*>( enemyEnt );
-		
+		if ( !CanSee(enemyAct, false) ) {
+			WanderAround();
+		}
 		// Clear our enemy if necessary
 		if ( enemyEnt ) {
 			if (enemyAct && enemyAct->IsInVehicle()) {
@@ -1163,6 +1166,7 @@ void idAI::Think( void ) {
 			} else {
 				bool enemyDead = (enemyEnt->fl.takedamage && enemyEnt->health <= 0);
 				if ( enemyDead || enemyEnt->fl.notarget || enemyEnt->IsHidden() || (enemyAct && enemyAct->team == team)) {
+					WanderAround();
 					ClearEnemy ( enemyDead );
 				}
 			}
@@ -3076,16 +3080,14 @@ idEntity *idAI::HeardSound( int ignore_team ){
 		idVec3 org = physicsObj.GetOrigin();
 		float dist = ( pos - org ).LengthSqr();
 		
-		if ( dist < Square( combat.earRange ) ) {
+		WanderAround();
+		if ( dist < 25.0f ) {
 			//really close?
-			if ( dist < Square( combat.earRange/4.0f ) ) {		
+			if ( dist < 6.0f ) {		
 				return actor;
 			//possible LOS
-			} else if ( dist < Square( combat.visRange * 2.0f ) && CanSee( actor, false ) ) {
+			} else if ( dist < 20.0f && CanSee( actor, false ) ) {
 				return actor;
-			} else if ( combat.fl.aware ) {
-				//FIXME: or, maybe find cover/hide/ambush spot and wait to ambush them?
-			//don't have an enemy and not tethered to a position
 			} else if ( !GetEnemy() && !tether ) {
 				//go into search mode
 				WanderAround();

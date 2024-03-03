@@ -605,11 +605,13 @@ void Cmd_TogglePOV_f(const idCmdArgs& args) {
 		pm_thirdPerson.SetBool(false);
 		pm_minviewpitch.SetInteger(-89);
 		pm_maxviewpitch.SetInteger(89);
+		player->SetInfluenceLevel(INFLUENCE_LEVEL1);
 	}
 	else if (!pm_thirdPerson.GetBool()) {
 		pm_thirdPerson.SetBool(true);
 		pm_minviewpitch.SetInteger(0);
 		pm_maxviewpitch.SetInteger(0);
+		player->SetInfluenceLevel(INFLUENCE_NONE);
 	}
 }
 

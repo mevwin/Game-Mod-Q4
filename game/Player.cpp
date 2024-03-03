@@ -10921,7 +10921,6 @@ idPlayer::CalculateFirstPersonView
 void idPlayer::CalculateFirstPersonView( void ) {
 	if ( ( pm_modelView.GetInteger() == 1 ) || ( ( pm_modelView.GetInteger() == 2 ) && ( health <= 0 ) ) ) {
 		//	Displays the view from the point of view of the "camera" joint in the player model
-
 		idMat3 axis;
 		idVec3 origin;
 		idAngles ang;
