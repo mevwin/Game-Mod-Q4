@@ -1342,7 +1342,7 @@ bool idAI::WanderAround( void ) {
 		return false;
 	}
 
-	return StartMove ( MOVE_WANDER, dest, 0, NULL, NULL, 0.0f );
+	return StartMove ( MOVE_WANDER, dest, 0, NULL, NULL, 200.0f );
 }
 
 /*
