@@ -1162,18 +1162,13 @@ void idAI::Think(void) {
 	if (CheckDormant()) {
 		return;
 	} 
-	if (player->pfl.weaponFired )
+	if ( player->pfl.weaponFired )
 	gameLocal.Printf("%f \n", dist);
 
-	if ( dist >= 340.f ) {
-		//gameLocal.Printf("Enemy No target\n");
-		if ( !CanSeeFrom(GetEyePosition(), playerpos, true) ) {
-			WanderAround();
-			player->fl.notarget = true;
-		}
-		else {
-			MoveTo(playerpos, 200.0f);
-		}
+	
+	if ( dist >= 140.0f && !CanSeeFrom(GetEyePosition(), playerpos, true) ) {
+		player->fl.notarget = true;
+		WanderAround();
 	}
 	//HeardSound
 	// Simple think this frame?
@@ -1198,7 +1193,7 @@ void idAI::Think(void) {
 			}
 			else {
 				bool enemyDead = (enemyEnt->fl.takedamage && enemyEnt->health <= 0);
-				if (enemyDead || enemyEnt->fl.notarget || enemyEnt->IsHidden() || (enemyAct && enemyAct->team == team)) {
+				if (enemyDead || !CanSeeFrom(GetEyePosition(), playerpos, true)  ||enemyEnt->IsHidden() || (enemyAct && enemyAct->team == team)) {
 					ClearEnemy(enemyDead);
 				}
 			}
@@ -1665,7 +1660,9 @@ bool idAI::Pain(idEntity* inflictor, idEntity* attacker, int damage, const idVec
 	if (enemy.ent == attacker && !enemy.fl.visible) {
 		UpdateEnemyPosition(true);
 	}
-
+	idPlayer* player;
+	player = gameLocal.GetLocalPlayer();
+	player->fl.notarget = false;
 	return aifl.pain;
 }
 
@@ -3177,22 +3174,18 @@ idEntity* idAI::HeardSound(int ignore_team) {
 		idVec3 org = physicsObj.GetOrigin();
 		float dist = (pos - org).Length();
 
-		if ( aifl.pain || (dist < 340.0f && (actor->pfl.weaponFired || actor -> pfl.forward || actor->pfl.backward || actor->pfl.strafeLeft || actor->pfl.strafeRight )) ) {
+		if ( dist < 550.0f && (actor->pfl.weaponFired || actor->pfl.run || actor->pfl.crouch || CanSeeFrom(GetEyePosition(), pos, true)) ) {
 			//really close?
-			if (dist < ( 340.0f / 4.0f ) ) {
-				gameLocal.Printf("Heard sound, really close\n");
+			if ( dist < 160.0f && !actor->pfl.crouch && !CanSeeFrom(GetEyePosition(), actor, true) ) {
+				gameLocal.AlertAI(this);
 				actor->fl.notarget = false;
 				return actor;
 			}
 			//possible LOS
 			else if ( CanSeeFrom(GetEyePosition(), actor, true) ) {
-				gameLocal.Printf("Can see you\n");
+				gameLocal.AlertAI(this);
 				actor->fl.notarget = false;
 				return actor;
-			}
-			else if (aifl.pain && dist >= 340.0f) {
-				gameLocal.Printf("You hurt him but can't see/hear you\n");
-				MoveTo(pos, 200.0f);
 			}
 			else {
 				//go into search mode
@@ -4305,10 +4298,11 @@ idEntity* idAI::FindEnemy(bool inFov, bool forceNearest, float maxDistSqr) {
 	// Iterate through the enemy team
 	for (actor = aiManager.GetEnemyTeam((aiTeam_t)team); actor; actor = actor->teamNode.Next()) {
 		// Skip hidden enemies and enemies that cant be targeted
+		/*
 		if (actor->fl.notarget || actor->fl.isDormant || (actor->IsHidden() && !actor->IsInVehicle())) {
 			continue;
 		}
-
+		*/
 		// Calculate the distance between ourselves and our potential enemy
 		delta = physicsObj.GetOrigin() - actor->GetPhysics()->GetOrigin();
 		distSqr = delta.LengthSqr();

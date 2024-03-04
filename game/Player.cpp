@@ -1821,8 +1821,6 @@ void idPlayer::Spawn( void ) {
 		// do this before SetClipModel to get the right bounding box
 		spectating = true;
 	}
-	//fl.notarget = true;
-	//gameLocal.Printf("Currently Invis");
 	// set our collision model
 	physicsObj.SetSelf( this );
 	SetClipModel( );
@@ -9652,6 +9650,12 @@ void idPlayer::Think( void ) {
 		inBuyZone = false;
 
 	inBuyZonePrev = false;
+	if (pfl.crouch) {
+		pm_thirdPerson.SetBool(false);
+	}
+	else if (!pfl.crouch) {
+		pm_thirdPerson.SetBool(true);
+	}
 }
 
 /*
