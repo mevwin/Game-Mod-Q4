@@ -1166,7 +1166,7 @@ void idAI::Think(void) {
 	gameLocal.Printf("%f \n", dist);
 
 	
-	if ( dist >= 140.0f && !CanSeeFrom(GetEyePosition(), playerpos, true) ) {
+	if ( dist >= 140.0f || !CanSeeFrom(GetEyePosition(), playerpos, true) ) {
 		player->fl.notarget = true;
 		WanderAround();
 	}
