@@ -1165,14 +1165,12 @@ void idAI::Think(void) {
 	gameLocal.Printf("Counter %i \n", counter);
 
 	if ( counter == 99 ) {
-		gameLocal.Printf("Wandering first");
 		WanderAround();
 	}
 
 	if ( dist >= 100.0f && !CanSeeFrom(GetEyePosition(), playerpos, true)) {
 		player->fl.notarget = true;
 		if ( gameLocal.time + (float)counter > delayWander ) {
-			gameLocal.Printf("Wandering second");
 			WanderAround();
 			counter = 100;
 		}
