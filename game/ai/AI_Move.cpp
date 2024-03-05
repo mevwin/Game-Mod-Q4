@@ -1335,14 +1335,14 @@ bool idAI::WanderAround( void ) {
 	
 	StopMove( MOVE_STATUS_DONE );
 	
-	dest = physicsObj.GetOrigin() + viewAxis[ 0 ] * physicsObj.GetGravityAxis() * 20000.0f;
+	dest = physicsObj.GetOrigin() + viewAxis[ 0 ] * physicsObj.GetGravityAxis() * 256.0f;
 	if ( !NewWanderDir( dest ) ) {
 		StopMove( MOVE_STATUS_DEST_UNREACHABLE );
 		move.fl.goalUnreachable = true;
 		return false;
 	}
 
-	return StartMove ( MOVE_TO_TETHER, dest, 0, NULL, NULL, 20000.0f );
+	return StartMove ( MOVE_WANDER, dest, 0, NULL, NULL, 0.0f );
 }
 
 /*

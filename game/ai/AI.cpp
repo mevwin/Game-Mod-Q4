@@ -26,7 +26,7 @@ const char* aiTalkMessageString[] = {
 };
 
 static const float AI_SIGHTDELAYSCALE = 5000.0f;			// Full sight delay at 5 seconds or more of not seeing enemy
-
+int counter = 0;
 
 /*
 ===============================================================================
@@ -1158,17 +1158,25 @@ void idAI::Think(void) {
 	idVec3 playerpos = player->GetPhysics()->GetOrigin();
 	idVec3 enemypos = physicsObj.GetOrigin();
 	float dist = (playerpos - enemypos).Length();
-
-	if (CheckDormant()) {
-		return;
-	} 
+	float delayWander = 200.0f + gameLocal.time;
+	counter++;
 	if ( player->pfl.weaponFired )
 	gameLocal.Printf("%f \n", dist);
+	gameLocal.Printf("Counter %i \n", counter);
 
-	
-	if ( dist >= 140.0f || !CanSeeFrom(GetEyePosition(), playerpos, true) ) {
-		player->fl.notarget = true;
+	if ( counter == 99 ) {
+		gameLocal.Printf("Wandering first");
 		WanderAround();
+	}
+
+	if ( dist >= 100.0f && !CanSeeFrom(GetEyePosition(), playerpos, true)) {
+		player->fl.notarget = true;
+		if ( gameLocal.time + (float)counter > delayWander ) {
+			gameLocal.Printf("Wandering second");
+			WanderAround();
+			counter = 100;
+		}
+		
 	}
 	//HeardSound
 	// Simple think this frame?
@@ -1193,7 +1201,7 @@ void idAI::Think(void) {
 			}
 			else {
 				bool enemyDead = (enemyEnt->fl.takedamage && enemyEnt->health <= 0);
-				if (enemyDead || !CanSeeFrom(GetEyePosition(), playerpos, true)  ||enemyEnt->IsHidden() || (enemyAct && enemyAct->team == team)) {
+				if (enemyDead || !CanSeeFrom(GetEyePosition(), playerpos, true) || enemyEnt->IsHidden() || (enemyAct && enemyAct->team == team)) {
 					ClearEnemy(enemyDead);
 				}
 			}
@@ -3174,7 +3182,7 @@ idEntity* idAI::HeardSound(int ignore_team) {
 		idVec3 org = physicsObj.GetOrigin();
 		float dist = (pos - org).Length();
 
-		if ( dist < 550.0f && (actor->pfl.weaponFired || actor->pfl.run || actor->pfl.crouch || CanSeeFrom(GetEyePosition(), pos, true)) ) {
+		if ( actor->pfl.weaponFired || actor->pfl.run || actor->pfl.crouch || CanSeeFrom(GetEyePosition(), pos, true) ) {
 			//really close?
 			if ( dist < 160.0f && !actor->pfl.crouch && !CanSeeFrom(GetEyePosition(), actor, true) ) {
 				gameLocal.AlertAI(this);
@@ -3182,7 +3190,7 @@ idEntity* idAI::HeardSound(int ignore_team) {
 				return actor;
 			}
 			//possible LOS
-			else if ( CanSeeFrom(GetEyePosition(), actor, true) ) {
+			else if ( CanSeeFrom(GetEyePosition(), actor, true) && dist < 300.0f) {
 				gameLocal.AlertAI(this);
 				actor->fl.notarget = false;
 				return actor;
