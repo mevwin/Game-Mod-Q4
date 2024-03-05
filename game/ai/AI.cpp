@@ -1162,7 +1162,6 @@ void idAI::Think(void) {
 	counter++;
 	if ( player->pfl.weaponFired )
 	gameLocal.Printf("%f \n", dist);
-	gameLocal.Printf("Counter %i \n", counter);
 
 	if ( counter == 99 ) {
 		WanderAround();
@@ -3188,7 +3187,12 @@ idEntity* idAI::HeardSound(int ignore_team) {
 				return actor;
 			}
 			//possible LOS
-			else if ( CanSeeFrom(GetEyePosition(), actor, true) && dist < 300.0f) {
+			else if ( CanSeeFrom(GetEyePosition(), actor, true) && dist < 350.0f) {
+				gameLocal.AlertAI(this);
+				actor->fl.notarget = false;
+				return actor;
+			}
+			else if ( actor->pfl.weaponFired ) {
 				gameLocal.AlertAI(this);
 				actor->fl.notarget = false;
 				return actor;
